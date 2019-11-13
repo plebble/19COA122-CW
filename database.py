@@ -1,5 +1,6 @@
+import time
 """
-Created by: Jacob Toller, 14:39, 13/11/19
+Created by: Jacob Toller (B922435), 14:39, 13/11/19
 
 database.py is the module which handles the low level database interactions,
 this means reading and writing data to and from the file and directly
@@ -14,9 +15,11 @@ as
 """
 
 def read_database():
-    """Reads and returns data from the database.txt file
+    """Reads and returns data from the database.txt file.
 
-returns a 2D array with the data from database.txt, after performing the
+This function has no parameters
+
+Returns a 2D array with the data from database.txt, after performing the
 following:
     splits the whole text file into an array, with each line as a separate
     element
@@ -26,6 +29,8 @@ following:
     splits each element from the array into its own array, creating a 2D array,
     changes everything to its correct data type, and replaces '*sc*' with ';'
     in the title of the book
+
+Returns a 2D array
 
 """
     with open("database.txt","r") as file:
@@ -41,5 +46,28 @@ following:
         data[i][1] = data[i][1].replace("*sc*",";")
     return data
 
-print(read_database())
+def create_log_entry(operation,book_id,member_id):
+    """Creates a new entry in the logbook.txt file.
+
+Parameters:
+    operation: string; sets what operation will be written to the log
+    book_id, member_id: integer; sets the book and member IDs to be written
+
+This function takes 3 parameters, as well as taking the system time
+automatically, and adds them to the end of logfile.txt. For example:
+create_log_entry("+","5","4657") would be called if member 4657 was to
+return the book with ID 5, and would create the following line in the log:
++;5;4657;1573663746
+The operation + signifies a book coming back into the library, as a return,
+while - is used for checking out books.
+
+This function does not return a value
+"""
+    data = ";".join([operation,str(book_id),str(member_id),str(round(time.time()))]) + "\n"
+    
+    with open("logfile.txt","a+") as file:
+        file.write(data)
+
+#print(read_database())
+#create_log_entry("-","34","2309")
      
