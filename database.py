@@ -41,17 +41,41 @@ Returns a 2D array
 
     for i in range(0,len(data)):
         data[i] = data[i].split(";")
-        data[i][0] = int(data[i][0])
-        data[i][4] = int(data[i][4])
         data[i][1] = data[i][1].replace("*sc*",";")
     return data
+
+def update_member_id(book_id,new_member_id):
+    """Finds the database entry with the appropriate book ID and replaces
+the old member ID with the new member ID.
+
+Parameters:
+    book_id: string; the book_id used to find the entry to be changed
+    new_member_id: string; the value which the member ID of the entry will
+        be set to
+
+This function does not return a value
+"""
+    data = read_database()
+    for i in data:
+        if i[0] == book_id:
+            i[4] = new_member_id
+            break
+    
+    for i in range(0,len(data)):
+        data[i][1] = data[i][1].replace(";","*sc*")
+        data[i] = ";".join(data[i])
+
+    data = "\n".join(data)
+    print(data)
+    with open("database.txt","w") as file:
+        file.write(data)
 
 def create_log_entry(operation,book_id,member_id):
     """Creates a new entry in the logbook.txt file.
 
 Parameters:
     operation: string; sets what operation will be written to the log
-    book_id, member_id: integer; sets the book and member IDs to be written
+    book_id, member_id: string; sets the book and member IDs to be written
 
 This function takes 3 parameters, as well as taking the system time
 automatically, and adds them to the end of logfile.txt. For example:
@@ -70,4 +94,6 @@ This function does not return a value
 
 #print(read_database())
 #create_log_entry("-","34","2309")
+if __name__ == "__main__":
+    update_member_id("4","5647")
      
