@@ -1,7 +1,10 @@
 from tkinter import *
+import bookcheckout
 
 def checkout_button_pressed():
     print("checkout_button pressed")
+
+    print(bookcheckout.checkout2(checkout_bookID_textbox.get(),checkout_memberID_textbox.get()))
 
 def deposit_button_pressed():
     print("deposit_button pressed")
@@ -28,15 +31,6 @@ checkout_frame = LabelFrame(control_frame, bg="cyan",width=420, height=180,text 
 checkout_frame.pack(in_=control_frame,fill=X)
 checkout_frame.pack_propagate(0)
 
-checkout_memberID_frame = Frame(checkout_frame, bg="purple",width=420,height = 30)
-checkout_memberID_frame.pack()
-checkout_memberID_frame.pack_propagate(0)
-
-checkout_memberID_label = Label(checkout_memberID_frame,text = "Member ID:")
-checkout_memberID_label.pack(side=LEFT)
-checkout_memberID_textbox = Entry(checkout_memberID_frame)
-checkout_memberID_textbox.pack(side=LEFT)
-
 checkout_bookID_frame = Frame(checkout_frame, bg="salmon",width=420,height = 30)
 checkout_bookID_frame.pack()
 checkout_bookID_frame.pack_propagate(0)
@@ -45,6 +39,15 @@ checkout_bookID_label = Label(checkout_bookID_frame,text = "Book ID:")
 checkout_bookID_label.pack(side=LEFT)
 checkout_bookID_textbox = Entry(checkout_bookID_frame)
 checkout_bookID_textbox.pack(side=LEFT)
+
+checkout_memberID_frame = Frame(checkout_frame, bg="purple",width=420,height = 30)
+checkout_memberID_frame.pack()
+checkout_memberID_frame.pack_propagate(0)
+
+checkout_memberID_label = Label(checkout_memberID_frame,text = "Member ID:")
+checkout_memberID_label.pack(side=LEFT)
+checkout_memberID_textbox = Entry(checkout_memberID_frame)
+checkout_memberID_textbox.pack(side=LEFT)
 
 checkout_button_frame = Frame(checkout_frame, bg="thistle",width=420,height = 30)
 checkout_button_frame.pack()

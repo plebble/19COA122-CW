@@ -66,7 +66,6 @@ This function does not return a value
         data[i] = ";".join(data[i])
 
     data = "\n".join(data)
-    print(data)
     with open("database.txt","w") as file:
         file.write(data)
 
