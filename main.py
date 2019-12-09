@@ -1,17 +1,34 @@
 from tkinter import *
 import bookcheckout
 
+def validate_memberID(memberID):
+    return memberID.isdigit() and (len(str(int(memberID))) == 4)
+
+def validate_bookID(bookID):
+    return bookID.isdigit()
+
 def checkout_button_pressed():
     print("checkout_button pressed")
+    bookID_input = checkout_bookID_textbox.get()
+    memberID_input = checkout_memberID_textbox.get()
+    if validate_bookID(bookID_input) == False:
+        print("invalid bookID input")
+    elif validate_memberID(memberID_input) == False:
+        print("invalid memberID input")
+    else:
+        bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
+        success = bookcheckout.checkout(bookID_input,memberID_input)
 
-    print(bookcheckout.checkout2(checkout_bookID_textbox.get(),checkout_memberID_textbox.get()))
+    if success:
+        print("Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input))
+    else:
+        print("checkout failure")
 
 def deposit_button_pressed():
     print("deposit_button pressed")
 
 def search_button_pressed():
     print("search_button pressed")
-
 
 root = Tk()
 root.title("Model Definition")
