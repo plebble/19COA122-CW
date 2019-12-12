@@ -44,6 +44,12 @@ Returns a 2D array
         data[i][1] = data[i][1].replace("*sc*",";")
     return data
 
+def find_by_bookID(book_id):
+    for i in read_database():
+        if i[0] == book_id:
+            return i
+    return False
+
 def update_member_id(book_id,new_member_id):
     """Finds the database entry with the appropriate book ID and replaces
 the old member ID with the new member ID.
@@ -91,8 +97,20 @@ This function does not return a value
     with open("logfile.txt","a+") as file:
         file.write(data)
 
+def read_logfile():
+    with open("logfile.txt","r") as file:
+        data = file.read().split("\n")
+
+    while data[len(data)-1] == "":
+        del data[-1]
+
+    for i in range(0,len(data)):
+        data[i] = data[i].split(";")
+    return data
+
 #print(read_database())
 #create_log_entry("-","34","2309")
 if __name__ == "__main__":
-    update_member_id("4","5647")
+    0+0
+    #print(read_logfile())
      

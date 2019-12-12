@@ -2,6 +2,32 @@ from tkinter import *
 import bookcheckout
 import bookreturn
 import database
+import booksearch
+import booklist
+
+chart = False
+
+def radio_button_pressed():
+    global radio
+    swapCanvas(radio.get())
+
+def swapCanvas(mode):
+    global display_canvas
+    global display_scrollbar
+    global chart_canvas
+    if mode == "table":
+        chart_canvas.pack_forget()
+        display_canvas.pack(side="left",expand = True, fill = "both")
+        display_scrollbar.pack(side="right",fill="y")
+        chart = False
+    elif mode == "chart":
+        display_canvas.pack_forget()
+        display_scrollbar.pack_forget()
+        chart_canvas.pack(side="left",expand = True, fill = "both")
+        popularity = booklist.getPopularity()
+        popularity = sorted(popularity.items() , reverse=True, key=lambda x: x[1])
+        booklist.barChart(chart_canvas,popularity)
+        chart = True
 
 def updateTable(filt=""):
     global grid_frame
@@ -19,7 +45,6 @@ def loadTable(filt=""):
     Label(grid_frame,text="Member Status").grid(row=0,column=4,sticky="w")
     # displaying book data
     data = database.read_database()
-    print(data)
     for i in range(1,len(data) + 1):
         entry = data[i - 1]
         if filt == "" or filt.lower() in entry[1].lower(): # will only display book if it matches the filter
@@ -47,11 +72,11 @@ def checkout_button_pressed():
         bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
         success = bookcheckout.checkout(bookID_input,memberID_input)
 
-    if success:
-        print("Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input))
-        updateTable() # redraw table with updated information
-    else:
-        print("checkout failure")
+        if success:
+            print("Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input))
+            updateTable() # redraw table with updated information
+        else:
+            print("checkout failure")
 
 def deposit_button_pressed():
     print("deposit_button pressed")
@@ -62,11 +87,11 @@ def deposit_button_pressed():
         bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
         success = bookreturn.deposit(bookID_input)
 
-    if success:
-        print("Book %s has been successfully returned"%(bookID_input))
-        updateTable() # redraw table with updated information
-    else:
-        print("checkout failure")
+        if success:
+            print("Book %s has been successfully returned"%(bookID_input))
+            updateTable() # redraw table with updated information
+        else:
+            print("checkout failure")
 
 def search_button_pressed():
     print("search_button pressed")
@@ -107,6 +132,8 @@ display_scrollbar.pack(side="right",fill="y")
 display_canvas.pack(side="left",expand = True, fill = "both")
 display_canvas.create_window((0,0),window=display_subframe,anchor='nw')
 display_subframe.bind("<Configure>",scroller)
+
+chart_canvas = Canvas(display_frame,bg="bisque")
 
 grid_frame=Frame(display_subframe,bg="red",width=860, height=720)
 grid_frame.pack(fill=X)
@@ -191,8 +218,13 @@ search_button.pack(side=LEFT)
 clear_search_button = Button(search_button_frame,text = "Clear",command = clear_search_button_pressed)
 clear_search_button.pack(side=LEFT)
 
-#checkout_label = Label(checkout_frame,text="Checkout Label")
-#checkout_label.pack()
+radio_frame = Frame(search_frame, bg="bisque",width=420,height = 30)
+radio_frame.pack()
+radio_frame.pack_propagate(0)
 
+radio = StringVar()
+radio.set("table")
+Radiobutton(radio_frame,text="Table View",variable=radio,value="table",command=radio_button_pressed).pack(side=LEFT)
+Radiobutton(radio_frame,text="Chart View",variable=radio,value="chart",command=radio_button_pressed).pack(side=LEFT)
 
 root.mainloop()
