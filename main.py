@@ -1,8 +1,36 @@
 from tkinter import *
 import bookcheckout
+import bookreturn
+import database
+
+def updateTable(filt=""):
+    global grid_frame
+    for i in grid_frame.winfo_children():
+        i.destroy() # clears grid before redrawing it
+
+    loadTable(filt)
+
+def loadTable(filt=""):
+    # Creating table headers
+    Label(grid_frame,text="Book ID").grid(row=0,column=0,sticky="w")
+    Label(grid_frame,text="Title").grid(row=0,column=1,sticky="w")
+    Label(grid_frame,text="Author").grid(row=0,column=2,sticky="w")
+    Label(grid_frame,text="Date Added").grid(row=0,column=3,sticky="w")
+    Label(grid_frame,text="Member Status").grid(row=0,column=4,sticky="w")
+    # displaying book data
+    data = database.read_database()
+    print(data)
+    for i in range(1,len(data) + 1):
+        entry = data[i - 1]
+        if filt == "" or filt.lower() in entry[1].lower(): # will only display book if it matches the filter
+            for j in range(0,len(entry)):
+                temp = Label(grid_frame,text=entry[j]).grid(row=i,column=j,sticky="w")
+       
+def scroller(event): # function that manages table scrolling
+    display_canvas.configure(scrollregion=display_canvas.bbox("all"),width=200,height=200)
 
 def validate_memberID(memberID):
-    return memberID.isdigit() and (len(str(int(memberID))) == 4)
+    return memberID.isdigit() and (len(str(int(memberID))) == 4) # checks that its a 4 digit number between 1000-9999
 
 def validate_bookID(bookID):
     return bookID.isdigit()
@@ -21,28 +49,71 @@ def checkout_button_pressed():
 
     if success:
         print("Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input))
+        updateTable() # redraw table with updated information
     else:
         print("checkout failure")
 
 def deposit_button_pressed():
     print("deposit_button pressed")
+    bookID_input = deposit_bookID_textbox.get()
+    if validate_bookID(bookID_input) == False:
+        print("invalid bookID input")
+    else:
+        bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
+        success = bookreturn.deposit(bookID_input)
+
+    if success:
+        print("Book %s has been successfully returned"%(bookID_input))
+        updateTable() # redraw table with updated information
+    else:
+        print("checkout failure")
 
 def search_button_pressed():
     print("search_button pressed")
+    updateTable(search_title_textbox.get()) # updates table with filter of the textbox entry
 
+def clear_search_button_pressed():
+    print("search_button pressed")
+    search_title_textbox.delete(0,END) # clears textbox, resets table
+    updateTable()
+    
+
+# aplogies if I accidentally submit this with the funky colours, its so I can see the frame boundaries
+# if I do, open find and replace, set regex to true and replace
+# bg=\"(.*?)\"
+# with
+# bg="SystemButtonFace"
+
+# root definition and table display
 root = Tk()
-root.title("Model Definition")
-root.geometry("{}x{}".format(1280, 720))
+root.title("Dr Batmaz's amazing library")
+root.geometry("1280x720")
 root.configure(bg="lime")
 
-control_frame = Frame(root,bg = "azure",width = 420)
+control_frame = Frame(root,bg="azure",width = 420)
 control_frame.pack(side = LEFT, fill=Y)
 control_frame.pack_propagate(0)
 
 display_frame = Frame(root, bg="purple", width=860, height=720)
 display_frame.pack(side=LEFT,fill=Y)
+display_frame.pack_propagate(0)
 
-#================
+display_canvas=Canvas(display_frame,bg="coral")
+display_subframe=Frame(display_canvas,bg="yellow")
+display_scrollbar=Scrollbar(display_frame,orient="vertical",command=display_canvas.yview)
+display_canvas.configure(yscrollcommand=display_scrollbar.set)
+
+display_scrollbar.pack(side="right",fill="y")
+display_canvas.pack(side="left",expand = True, fill = "both")
+display_canvas.create_window((0,0),window=display_subframe,anchor='nw')
+display_subframe.bind("<Configure>",scroller)
+
+grid_frame=Frame(display_subframe,bg="red",width=860, height=720)
+grid_frame.pack(fill=X)
+grid_frame.pack_propagate(0)
+loadTable()
+
+# checkout frame and contents
 
 checkout_frame = LabelFrame(control_frame, bg="cyan",width=420, height=180,text = "Checkout")
 checkout_frame.pack(in_=control_frame,fill=X)
@@ -73,7 +144,7 @@ checkout_button_frame.pack_propagate(0)
 checkout_button = Button(checkout_button_frame,text = "Checkout",command = checkout_button_pressed)
 checkout_button.pack(side=LEFT)
 
-#================
+# deposit frame and contents
 
 deposit_frame = LabelFrame(control_frame, bg="orange", width=420, height=180,text = "Return")
 deposit_frame.pack(in_=control_frame,fill=X)
@@ -95,7 +166,7 @@ deposit_button_frame.pack_propagate(0)
 deposit_button = Button(deposit_button_frame,text = "Return",command = deposit_button_pressed)
 deposit_button.pack(side=LEFT)
 
-#================
+# search frame and contents
 
 search_frame = LabelFrame(control_frame, bg="yellow", width=420, height=360,text = "View")
 search_frame.pack(in_=control_frame,fill=X)
@@ -117,24 +188,11 @@ search_button_frame.pack_propagate(0)
 search_button = Button(search_button_frame,text = "Search",command = search_button_pressed)
 search_button.pack(side=LEFT)
 
+clear_search_button = Button(search_button_frame,text = "Clear",command = clear_search_button_pressed)
+clear_search_button.pack(side=LEFT)
+
 #checkout_label = Label(checkout_frame,text="Checkout Label")
 #checkout_label.pack()
 
 
-"""
-control_frame = Frame(root, bg="cyan", width=420, height=720, pady=3)
-root.grid_rowconfigure(1, weight=1)
-root.grid_columnconfigure(0, weight=1)
-
-control_frame.grid(row=0, sticky="ew")"""
-
-"""Lb1 = Listbox(top)
-Lb1.insert(1, "Python")
-Lb1.insert(2, "Perl")
-Lb1.insert(3, "C")
-Lb1.insert(4, "PHP")
-Lb1.insert(5, "JSP")
-Lb1.insert(6, "Ruby")
-
-Lb1.pack()"""
 root.mainloop()

@@ -1,6 +1,15 @@
 import database
 
 def checkout(book_id,member_id):
+    """Sets a books member value to the provided member_id, returns false if not found or is already out
+
+Parameters:
+    book_id: string; the book_id used to find the book to be returned
+    member_id: string; the member_id of the member borrowing the book
+
+Returns:
+    checkout(...): boolean; True if successful, False otherwise
+"""
     data = database.read_database()
     current_member_id = "-1"
     for i in data:
