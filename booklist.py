@@ -2,6 +2,13 @@ import colorsys
 import database
 import time
 from tkinter import *
+"""
+Created by: Jacob Toller (B922435), 12 ‎December ‎2019, ‏‎17:46:06
+
+booklist.py is reponsible for getting the amount of times a book has been taken
+out, as well as functioning as the replacement for matplotlib
+
+"""
 
 def getPopularity(back_time = -1):
     """This function reads the logfile and counts how many times a book has been taken out.
@@ -38,6 +45,7 @@ Returns:
 
 def barChart(canvas,data,max_items=10):
     """This function plots a bar chart inside the provided tkinter canvas.
+I'm really proud of this function. :)
 
 Parameters:
     canvas; tkinter widget: This is the canvas widget that this function will

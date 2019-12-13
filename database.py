@@ -1,16 +1,16 @@
 import time
 """
-Created by: Jacob Toller (B922435), 14:39, 13/11/19
+Created by: Jacob Toller (B922435), 13 ‎November ‎2019, ‏‎14:39:10
 
 database.py is the module which handles the low level database interactions,
 this means reading and writing data to and from the file and directly
 returning the data with minimal processing.
 
 An exception to this is the exchange between ';' and '*sc*', as I'm using
-';' as the separator to separate attributes between the same entry
+';' as the separator to separate attributes between the same entry.
 
 To separate different entries inside the database.txt file, a new line is used
-as 
+as a separator.
 
 """
 

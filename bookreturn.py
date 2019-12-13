@@ -1,5 +1,15 @@
 import database
 import bookcheckout # Used for testing purposes
+"""
+Created by: Jacob Toller (B922435), ‎‎09 ‎December ‎2019, ‏‎10:04:41
+
+bookreturn.py is the module used for mid-level operations which involve
+putting books back into the system
+
+for low-level direct operations, see database.py
+
+"""
+
 def deposit(book_id):
     """Sets a books member value to 0, returns false if not found or is already returned
 

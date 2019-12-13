@@ -1,5 +1,14 @@
 import database
 import bookreturn # Used for testing purposes
+"""
+Created by: Jacob Toller (B922435), ‎05 ‎December ‎2019, ‏‎10:33:35
+
+bookcheckout.py is the module used for mid-level operations which involve
+taking books out of the system
+
+for low-level direct operations, see database.py
+
+"""
 
 def checkout(book_id,member_id):
     """Sets a books member value to the provided member_id, returns false if not found or is already out
