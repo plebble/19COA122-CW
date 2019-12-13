@@ -45,6 +45,16 @@ Returns a 2D array
     return data
 
 def find_by_bookID(book_id):
+    """Returns the book with the appropriate book ID.
+
+Parameters:
+    book_id; string: book id of the book to be returned.
+
+Returns:
+    find_by_bookID(...); list/boolean: returns the book as a list if it is found
+        or returns False if it is not found.
+
+"""
     for i in read_database():
         if i[0] == book_id:
             return i
@@ -55,9 +65,9 @@ def update_member_id(book_id,new_member_id):
 the old member ID with the new member ID.
 
 Parameters:
-    book_id: string; the book_id used to find the entry to be changed
+    book_id: string; the book_id used to find the entry to be changed.
     new_member_id: string; the value which the member ID of the entry will
-        be set to
+        be set to.
 
 This function does not return a value
 """
@@ -79,8 +89,8 @@ def create_log_entry(operation,book_id,member_id):
     """Creates a new entry in the logbook.txt file.
 
 Parameters:
-    operation: string; sets what operation will be written to the log
-    book_id, member_id: string; sets the book and member IDs to be written
+    operation: string; sets what operation will be written to the log.
+    book_id, member_id: string; sets the book and member IDs to be written.
 
 This function takes 3 parameters, as well as taking the system time
 automatically, and adds them to the end of logfile.txt. For example:
@@ -98,6 +108,13 @@ This function does not return a value
         file.write(data)
 
 def read_logfile():
+    """Reads and returns the logfile data
+
+Returns:
+    read_logfile(...); 2D list: List containing each log entry as a sub list,
+        with each attribute of the entry as a different element. For more
+        information, read the documentation of create_log_entry(...)
+"""
     with open("logfile.txt","r") as file:
         data = file.read().split("\n")
 
@@ -108,9 +125,20 @@ def read_logfile():
         data[i] = data[i].split(";")
     return data
 
-#print(read_database())
-#create_log_entry("-","34","2309")
-if __name__ == "__main__":
-    0+0
-    #print(read_logfile())
+def reset():
+    """FOR TESTING PURPOSES ONLY, resets all member IDs to 0, does not log
+"""
+    for i in data:
+        database.update_member_id(i[0],"0")
+
+if __name__ == "__main__": # Testing and Examples/Demonstration
+    print(read_logfile())
+    print(read_database())
+    create_log_entry("-","34","2309")
+    print(read_logfile())
+    update_member_id("1","1556")
+    if input("press ENTER to continue, enter anything else to reset database") != "":
+        reset()
+
+    
      

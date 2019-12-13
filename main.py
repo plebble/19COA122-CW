@@ -25,7 +25,7 @@ def swapCanvas(mode):
         display_scrollbar.pack_forget()
         chart_canvas.pack(side="left",expand = True, fill = "both")
         popularity = booklist.getPopularity()
-        popularity = sorted(popularity.items() , reverse=True, key=lambda x: x[1])
+        popularity = sorted(popularity.items() , reverse=True, key=lambda x: x[1]) # sorts dictionary by value, converts to list of tuples
         booklist.barChart(chart_canvas,popularity)
         chart = True
 
@@ -38,18 +38,18 @@ def updateTable(filt=""):
 
 def loadTable(filt=""):
     # Creating table headers
-    Label(grid_frame,text="Book ID").grid(row=0,column=0,sticky="w")
-    Label(grid_frame,text="Title").grid(row=0,column=1,sticky="w")
-    Label(grid_frame,text="Author").grid(row=0,column=2,sticky="w")
-    Label(grid_frame,text="Date Added").grid(row=0,column=3,sticky="w")
-    Label(grid_frame,text="Member Status").grid(row=0,column=4,sticky="w")
+    Label(grid_frame,text="Book ID").grid(row=0,column=0,sticky="w",padx = 2,pady = 4)
+    Label(grid_frame,text="Title").grid(row=0,column=1,sticky="w",padx = 2,pady = 4)
+    Label(grid_frame,text="Author").grid(row=0,column=2,sticky="w",padx = 2,pady = 4)
+    Label(grid_frame,text="Date Added").grid(row=0,column=3,sticky="w",padx = 2,pady = 4)
+    Label(grid_frame,text="Member Status").grid(row=0,column=4,sticky="w",padx = 2,pady = 4)
     # displaying book data
     data = database.read_database()
     for i in range(1,len(data) + 1):
         entry = data[i - 1]
         if filt == "" or filt.lower() in entry[1].lower(): # will only display book if it matches the filter
             for j in range(0,len(entry)):
-                temp = Label(grid_frame,text=entry[j]).grid(row=i,column=j,sticky="w")
+                temp = Label(grid_frame,text=entry[j]).grid(row=i,column=j,sticky="w",padx = 2,pady = 4)
        
 def scroller(event): # function that manages table scrolling
     display_canvas.configure(scrollregion=display_canvas.bbox("all"),width=200,height=200)
@@ -102,29 +102,22 @@ def clear_search_button_pressed():
     search_title_textbox.delete(0,END) # clears textbox, resets table
     updateTable()
     
-
-# aplogies if I accidentally submit this with the funky colours, its so I can see the frame boundaries
-# if I do, open find and replace, set regex to true and replace
-# bg=\"(.*?)\"
-# with
-# bg="SystemButtonFace"
-
 # root definition and table display
 root = Tk()
 root.title("Dr Batmaz's amazing library")
 root.geometry("1280x720")
-root.configure(bg="lime")
+root.configure(bg="SystemButtonFace")
 
-control_frame = Frame(root,bg="azure",width = 420)
+control_frame = Frame(root,bg="SystemButtonFace",width = 420)
 control_frame.pack(side = LEFT, fill=Y)
 control_frame.pack_propagate(0)
 
-display_frame = Frame(root, bg="purple", width=860, height=720)
+display_frame = Frame(root, bg="SystemButtonFace", width=860, height=720)
 display_frame.pack(side=LEFT,fill=Y)
 display_frame.pack_propagate(0)
 
-display_canvas=Canvas(display_frame,bg="coral")
-display_subframe=Frame(display_canvas,bg="yellow")
+display_canvas=Canvas(display_frame,bg="dim gray")
+display_subframe=Frame(display_canvas,bg="dim gray")
 display_scrollbar=Scrollbar(display_frame,orient="vertical",command=display_canvas.yview)
 display_canvas.configure(yscrollcommand=display_scrollbar.set)
 
@@ -135,18 +128,18 @@ display_subframe.bind("<Configure>",scroller)
 
 chart_canvas = Canvas(display_frame,bg="bisque")
 
-grid_frame=Frame(display_subframe,bg="red",width=860, height=720)
+grid_frame=Frame(display_subframe,bg="SystemButtonFace",width=860, height=720)
 grid_frame.pack(fill=X)
 grid_frame.pack_propagate(0)
 loadTable()
 
 # checkout frame and contents
 
-checkout_frame = LabelFrame(control_frame, bg="cyan",width=420, height=180,text = "Checkout")
+checkout_frame = LabelFrame(control_frame, bg="SystemButtonFace",width=420, height=180,text = "Checkout")
 checkout_frame.pack(in_=control_frame,fill=X)
 checkout_frame.pack_propagate(0)
 
-checkout_bookID_frame = Frame(checkout_frame, bg="salmon",width=420,height = 30)
+checkout_bookID_frame = Frame(checkout_frame, bg="SystemButtonFace",width=420,height = 30)
 checkout_bookID_frame.pack()
 checkout_bookID_frame.pack_propagate(0)
 
@@ -155,7 +148,7 @@ checkout_bookID_label.pack(side=LEFT)
 checkout_bookID_textbox = Entry(checkout_bookID_frame)
 checkout_bookID_textbox.pack(side=LEFT)
 
-checkout_memberID_frame = Frame(checkout_frame, bg="purple",width=420,height = 30)
+checkout_memberID_frame = Frame(checkout_frame, bg="SystemButtonFace",width=420,height = 30)
 checkout_memberID_frame.pack()
 checkout_memberID_frame.pack_propagate(0)
 
@@ -164,7 +157,7 @@ checkout_memberID_label.pack(side=LEFT)
 checkout_memberID_textbox = Entry(checkout_memberID_frame)
 checkout_memberID_textbox.pack(side=LEFT)
 
-checkout_button_frame = Frame(checkout_frame, bg="thistle",width=420,height = 30)
+checkout_button_frame = Frame(checkout_frame, bg="SystemButtonFace",width=420,height = 30)
 checkout_button_frame.pack()
 checkout_button_frame.pack_propagate(0)
 
@@ -173,11 +166,11 @@ checkout_button.pack(side=LEFT)
 
 # deposit frame and contents
 
-deposit_frame = LabelFrame(control_frame, bg="orange", width=420, height=180,text = "Return")
+deposit_frame = LabelFrame(control_frame, bg="SystemButtonFace", width=420, height=180,text = "Return")
 deposit_frame.pack(in_=control_frame,fill=X)
 deposit_frame.pack_propagate(0)
 
-deposit_bookID_frame = Frame(deposit_frame, bg="purple",width=420,height = 30)
+deposit_bookID_frame = Frame(deposit_frame, bg="SystemButtonFace",width=420,height = 30)
 deposit_bookID_frame.pack()
 deposit_bookID_frame.pack_propagate(0)
 
@@ -186,7 +179,7 @@ deposit_bookID_label.pack(side=LEFT)
 deposit_bookID_textbox = Entry(deposit_bookID_frame)
 deposit_bookID_textbox.pack(side=LEFT)
 
-deposit_button_frame = Frame(deposit_frame, bg="thistle",width=420,height = 30)
+deposit_button_frame = Frame(deposit_frame, bg="SystemButtonFace",width=420,height = 30)
 deposit_button_frame.pack()
 deposit_button_frame.pack_propagate(0)
 
@@ -195,11 +188,11 @@ deposit_button.pack(side=LEFT)
 
 # search frame and contents
 
-search_frame = LabelFrame(control_frame, bg="yellow", width=420, height=360,text = "View")
+search_frame = LabelFrame(control_frame, bg="SystemButtonFace", width=420, height=360,text = "View")
 search_frame.pack(in_=control_frame,fill=X)
 search_frame.pack_propagate(0)
 
-search_title_frame = Frame(search_frame, bg="deep pink",width=420,height = 30)
+search_title_frame = Frame(search_frame, bg="SystemButtonFace",width=420,height = 30)
 search_title_frame.pack()
 search_title_frame.pack_propagate(0)
 
@@ -208,7 +201,7 @@ search_title_label.pack(side=LEFT)
 search_title_textbox = Entry(search_title_frame)
 search_title_textbox.pack(side=LEFT)
 
-search_button_frame = Frame(search_frame, bg="thistle",width=420,height = 30)
+search_button_frame = Frame(search_frame, bg="SystemButtonFace",width=420,height = 30)
 search_button_frame.pack()
 search_button_frame.pack_propagate(0)
 
@@ -218,7 +211,7 @@ search_button.pack(side=LEFT)
 clear_search_button = Button(search_button_frame,text = "Clear",command = clear_search_button_pressed)
 clear_search_button.pack(side=LEFT)
 
-radio_frame = Frame(search_frame, bg="bisque",width=420,height = 30)
+radio_frame = Frame(search_frame, bg="SystemButtonFace",width=420,height = 30)
 radio_frame.pack()
 radio_frame.pack_propagate(0)
 

@@ -1,4 +1,5 @@
 import database
+import bookreturn # Used for testing purposes
 
 def checkout(book_id,member_id):
     """Sets a books member value to the provided member_id, returns false if not found or is already out
@@ -27,5 +28,10 @@ Returns:
         database.update_member_id(book_id,member_id)
         database.create_log_entry("-",book_id,member_id)
         return True
+
+if __name__ == "__main__":
+    bookreturn.deposit("4657") # makes sure that book 4657 is in storage
+    print("Success:",checkout("1","4657")) # This should return true
+    print("Success:",checkout("1","1456")) # Shoild return false as book 1 is out
 
     
