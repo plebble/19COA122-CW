@@ -7,6 +7,9 @@ import booklist
 
 chart = False
 
+def returnOutput(label,new_text,colour="SystemButtonFace"):
+    label.configure(text=new_text,fg=colour)
+
 def radio_button_pressed():
     global radio
     swapCanvas(radio.get())
@@ -62,33 +65,43 @@ def validate_bookID(bookID):
 
 def checkout_button_pressed():
     print("checkout_button pressed")
+    returnOutput(checkout_output,"Running...")
+    
     bookID_input = checkout_bookID_textbox.get()
     memberID_input = checkout_memberID_textbox.get()
     if validate_bookID(bookID_input) == False:
         print("invalid bookID input")
+        returnOutput(checkout_output,"Error: Book ID input not valid","red")
     elif validate_memberID(memberID_input) == False:
         print("invalid memberID input")
+        returnOutput(checkout_output,"Error: Member ID input not valid","red")
     else:
         bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
         success = bookcheckout.checkout(bookID_input,memberID_input)
 
         if success:
             print("Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input))
+            returnOutput(checkout_output,"Success: Book %s has been successfully checked out to member %s"%(bookID_input,memberID_input),"green")
             updateTable() # redraw table with updated information
         else:
             print("checkout failure")
+            returnOutput(checkout_output,"Error: Checkout failure, book not found or book already out","red")
 
 def deposit_button_pressed():
     print("deposit_button pressed")
+    returnOutput(deposit_output,"Running...")
+    
     bookID_input = deposit_bookID_textbox.get()
     if validate_bookID(bookID_input) == False:
         print("invalid bookID input")
+        returnOutput(deposit_output,"Error: Book ID input not valid","red")
     else:
         bookID_input = str(int(bookID_input))# gets rid of any leading 0s; ie turns '0003' into '3'
         success = bookreturn.deposit(bookID_input)
 
         if success:
             print("Book %s has been successfully returned"%(bookID_input))
+            returnOutput(deposit_output,"Book %s has been successfully returned"%(bookID_input),"green")
             updateTable() # redraw table with updated information
         else:
             print("checkout failure")
@@ -164,6 +177,13 @@ checkout_button_frame.pack_propagate(0)
 checkout_button = Button(checkout_button_frame,text = "Checkout",command = checkout_button_pressed)
 checkout_button.pack(side=LEFT)
 
+checkout_output_frame = Frame(checkout_frame, bg="SystemButtonFace",width=420,height = 30)
+checkout_output_frame.pack()
+checkout_output_frame.pack_propagate(0)
+
+checkout_output = Label(checkout_output_frame,text = "")
+checkout_output.pack(side=LEFT)
+
 # deposit frame and contents
 
 deposit_frame = LabelFrame(control_frame, bg="SystemButtonFace", width=420, height=180,text = "Return")
@@ -185,6 +205,13 @@ deposit_button_frame.pack_propagate(0)
 
 deposit_button = Button(deposit_button_frame,text = "Return",command = deposit_button_pressed)
 deposit_button.pack(side=LEFT)
+
+deposit_output_frame = Frame(deposit_frame, bg="SystemButtonFace",width=420,height = 30)
+deposit_output_frame.pack()
+deposit_output_frame.pack_propagate(0)
+
+deposit_output = Label(deposit_output_frame,text = "")
+deposit_output.pack(side=LEFT)
 
 # search frame and contents
 
