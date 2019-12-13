@@ -107,7 +107,8 @@ def deposit_button_pressed():
             returnOutput(deposit_output,"Book %s has been successfully returned"%(bookID_input),"green")
             updateTable() # redraw table with updated information
         else:
-            print("checkout failure")
+            print("deposit failure")
+            returnOutput(checkout_output,"Error: Deposit failure, book not found or book already in","red")
 
 def search_button_pressed():
     print("search_button pressed")
